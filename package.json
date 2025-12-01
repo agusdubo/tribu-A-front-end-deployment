@@ -2,7 +2,7 @@
   "name": "psa-finanzas-frontend",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://malenasein.github.io/tribu-A-frontend-2025-2C",
+  "homepage": "https://agusdubo.github.io/tribu-A-front-end-deployment/",
   "dependencies": {
     "chart.js": "^4.4.0",
     "lucide-react": "^0.294.0",
@@ -12,7 +12,6 @@
     "react-scripts": "5.0.1",
     "tailwindcss": "^3.3.0"
   },
-  "homepage": "https://malenasein.github.io/tribu-A-frontend-2025-2C/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
