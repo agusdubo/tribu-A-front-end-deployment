@@ -1,5 +1,5 @@
 // APIClient.js - Configurado para Spring Boot Backend
-const URL_BASE = window.APP_CONFIG?.API_BASE_URL || "https://tpg-squad-5-2025-2c.onrender.com/";
+const URL_BASE = window.APP_CONFIG?.API_BASE_URL || "https://tpg-squad-5-2025-2c.onrender.com";
 
 // Endpoints del backend (coinciden con los controllers)
 const ENDPOINT_RECURSOS = "/api/resources"
