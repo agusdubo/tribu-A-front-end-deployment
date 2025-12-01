@@ -18,7 +18,6 @@ const ProjectCostReport = () => {
     const [error, setError] = useState(null);
     const currentYear = new Date().getFullYear();
 
-    // Generar opciones de años (últimos 5 años)
     const YEARS = [];
     for (let i = 0; i < 5; i++) {
         const y = currentYear - i;
@@ -39,13 +38,10 @@ const ProjectCostReport = () => {
 
         try {
             console.log('📊 Generando reporte para proyecto:', projectId, 'año:', year);
-
-            // CAMBIO IMPORTANTE: Usar el método correcto con los parámetros en el orden correcto
             const reporteData = await APIClient.getProjectResourcesReport(projectId, year);
 
             console.log('✅ Reporte recibido:', reporteData);
 
-            // Validar estructura del reporte
             if (!reporteData) {
                 throw new Error('El servidor no devolvió datos');
             }
@@ -129,14 +125,12 @@ function renderReport(report, monthNames) {
         );
     }
 
-    // Calcular matriz de costos: costByResourceAndMonth[resourceId][month] = costo
     const costByResourceAndMonth = {};
     resourceEntries.forEach(([resourceId]) => {
         costByResourceAndMonth[resourceId] = {};
         months.forEach(m => costByResourceAndMonth[resourceId][m] = 0);
     });
 
-    // Rellenar con los datos del reporte
     (report.months || []).forEach(mData => {
         const month = mData.month; // 1-12
         (mData.costs || []).forEach(c => {
@@ -146,7 +140,6 @@ function renderReport(report, monthNames) {
         });
     });
 
-    // Calcular subtotales
     const subtotalPorRecurso = {};
     const subtotalPorMes = {};
     months.forEach(m => subtotalPorMes[m] = 0);

@@ -41,5 +41,4 @@ const ReportsHome = () => {
     );
 };
 
-// Al final del archivo
 export default ReportsHome;

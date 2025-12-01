@@ -12,7 +12,6 @@ const ProjectCostSelection = () => {
     const [error, setError] = useState(null);
     const today = new Date();
 
-    // ✅ CAMBIO: Ahora son AÑOS en lugar de MESES
     const YEARS = useMemo(() => {
         const currentYear = today.getFullYear();
         const years = [];

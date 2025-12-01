@@ -3,11 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader } from 'lucide-react';
 
 const API_BASE_URL = 'https://tpg-squad-5-2025-2c.onrender.com';
-
-// ID de Roles
-// ID '1f14...': Aparece en Martin, Lucia, Mariana -> Asumimos DEVELOPER
 const ROL_ID_DEVELOPER = "1f14a491-e26d-4092-86ea-d76f20c165d1";
-// ID '6e6e...': Aparece solo en Horacio -> Asumimos MANAGER
 const ROL_ID_MANAGER = "6e6ecd47-fa18-490e-b25a-c9101a398b6d";
 
 
@@ -19,10 +15,6 @@ const LoginPage = () => {
   const [loadingEmployees, setLoadingEmployees] = useState(true);
   const [error, setError] = useState('');
 
-
-  // ========================
-  // LOGICA DINAMICA DE ROLES
-  // ========================
   const determineRole = (rolId) => {
     if (!rolId) return 'DEVELOPER';
 
@@ -33,14 +25,12 @@ const LoginPage = () => {
     return 'DEVELOPER'
   };
 
-  // Helper para mostrar un nombre legible en el select
   const getRoleLabel = (rolId) => {
     if (rolId === ROL_ID_MANAGER) return 'Manager';
     if (rolId === ROL_ID_DEVELOPER) return 'Desarrollador';
     return 'Desconocido';
   }
 
-  // Carga inicial de los empleados
   useEffect(() => {
     const loadEmployees = async () => {
       try {
@@ -61,7 +51,6 @@ const LoginPage = () => {
       }
     };
 
-    // Limpiamos sesión vieja al entrar al login
     sessionStorage.clear();
     loadEmployees();
   }, []);
@@ -78,17 +67,14 @@ const LoginPage = () => {
     setError('');
 
     try {
-      // 1. Encontramos el empleado seleccionado
       const employee = employees.find(emp => emp.id === employeeCode);
       if (!employee) throw new Error('Empleado no encontrado');
 
-      // 2. Determinamos su rol real
       const realRole = determineRole(employee.rolId);
 
       console.log(`Login: ${employee.nombre} ${employee.apellido}`);
       console.log(`Rol ID: ${employee.rolId} -> Rol Sistema: ${realRole}`);
 
-      // 3. Guardamos la sesión compatible con ambos squads
       const userData = {
         id: employee.id,
         employeeCode: employee.id,
@@ -100,9 +86,6 @@ const LoginPage = () => {
       sessionStorage.setItem('user', JSON.stringify(userData));
       sessionStorage.setItem('isAuthenticated', 'true');
 
-      // 4. Redirección inteligente
-      // Si es Manager, va al selector general
-      // Si es Dev, va directo a carga de horas
       if (realRole === 'MANAGER') {
         navigate('/modulos');
       } else {

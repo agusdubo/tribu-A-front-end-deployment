@@ -1,7 +1,6 @@
-// APIClient.js - Configurado para Spring Boot Backend
+
 const URL_BASE = window.APP_CONFIG?.API_BASE_URL || "https://tpg-squad-5-2025-2c.onrender.com";
 
-// Endpoints del backend (coinciden con los controllers)
 const ENDPOINT_RECURSOS = "/api/resources"
 const ENDPOINT_PROYECTOS = "/api/projects"
 const ENDPOINT_TIME_ENTRIES = "/api/time-entries"
@@ -41,7 +40,6 @@ function getAuthHeaders() {
 
 let APIClient = {
 
-    // ========== RECURSOS ==========
     getAllResources: async function () {
         return getData(URL_BASE + ENDPOINT_RECURSOS)
     },
@@ -50,7 +48,6 @@ let APIClient = {
         return getData(URL_BASE + ENDPOINT_RECURSOS + "/" + id)
     },
 
-    // ========== PROYECTOS ==========
     getAllProjects: async function() {
         return getData(URL_BASE + ENDPOINT_PROYECTOS)
     },
@@ -59,17 +56,10 @@ let APIClient = {
         return getData(URL_BASE + ENDPOINT_PROYECTOS + "/resources/" + employeeId)
     },
 
-    // ========== TAREAS - A TRAVÉS DE TU BACKEND (PROXY) ==========
-
-    /**
-     * Obtener tareas del proyecto asignadas a un recurso específico
-     * Llama a TU backend, que hace de proxy con la API del profesor
-     */
     getTasksByProjectAndResource: async function(projectId, resourceId) {
         try {
             console.log('📋 Cargando tareas:', { projectId, resourceId });
 
-            // Llamar a TU backend que actúa como proxy
             const url = `${URL_BASE}/api/tasks/project/${projectId}/resource/${resourceId}`;
             const tasks = await getData(url);
 
@@ -83,9 +73,6 @@ let APIClient = {
         }
     },
 
-    /**
-     * Obtener todas las tareas de un proyecto (sin filtrar por recurso)
-     */
     getTasksByProject: async function(projectId) {
         try {
             console.log('📋 Cargando todas las tareas del proyecto:', projectId);
@@ -103,12 +90,11 @@ let APIClient = {
         }
     },
 
-    // ========== TIME ENTRIES ==========
     createTimeEntry: async function(data) {
         const timeEntryData = {
             employeeId: data.employeeId,
             projectId: data.projectId,
-            taskId: data.taskId || null,  // ✅ AGREGADO
+            taskId: data.taskId || null,
             workDate: data.workDate,
             workedMinutes: data.workedMinutes,
             description: data.description || ""
@@ -130,7 +116,7 @@ let APIClient = {
 
     updateTimeEntry: async function(id, data) {
         const timeEntryData = {
-            taskId: data.taskId || null,  // ✅ AGREGADO
+            taskId: data.taskId || null,
             workDate: data.workDate || data.fecha,
             workedMinutes: data.workedMinutes || (data.horas * 60),
             description: data.description || data.observaciones || ""
@@ -148,7 +134,6 @@ let APIClient = {
         });
     },
 
-    // ========== MANAGER - APROBACIONES ==========
     getPendingApproval: async function() {
         return getData(`${URL_BASE}${ENDPOINT_TIME_ENTRIES}/pending-approval`);
     },
@@ -165,20 +150,17 @@ let APIClient = {
         return postData(`${URL_BASE}${ENDPOINT_TIME_ENTRIES}/batch-approval`, approvals);
     },
 
-    // ========== REPORTES ==========
     getWeeklyHoursReport: async function(employeeId, startDate, endDate) {
         const url = `${URL_BASE}${ENDPOINT_REPORTES}/weekly-hours?employeeId=${employeeId}&startDate=${startDate}&endDate=${endDate}`;
         return getData(url);
     },
 
-    // src/services/APIClient.js
 
     getProjectResourcesReport: async function(projectId, year) {
         const url = `${URL_BASE}${ENDPOINT_REPORTES}/project-costs/${year}/${projectId}`;
         console.log('📊 Llamando a:', url);
         return getData(url);
     },
-    // ========== AUTENTICACIÓN ==========
     login: async function(employeeCode, password) {
         return postData(`${URL_BASE}${ENDPOINT_AUTH}/login`, {
             employeeCode,
@@ -189,10 +171,9 @@ let APIClient = {
     logout: async function() {
         sessionStorage.removeItem('user');
         sessionStorage.removeItem('isAuthenticated');
-        window.location.href = '/login.html';
+       
     },
 
-    // ========== MÉTODOS LEGACY (para compatibilidad) ==========
     getTimeEntriesByResource: async function(id) {
         return this.getTimeEntries(id);
     },
@@ -203,7 +184,6 @@ let APIClient = {
     }
 }
 
-// ========== FUNCIONES AUXILIARES ==========
 
 async function getData(url) {
     try {
@@ -218,7 +198,7 @@ async function getData(url) {
             if (response.status === 401) {
                 console.error('❌ No autorizado. Redirigiendo a login...');
                 sessionStorage.clear();
-                window.location.href = '/login.html';
+               
                 return null;
             }
 
@@ -252,7 +232,7 @@ async function postData(url, data) {
             if (response.status === 401) {
                 console.error('❌ No autorizado. Redirigiendo a login...');
                 sessionStorage.clear();
-                window.location.href = '/login.html';
+               
                 return null;
             }
 
@@ -292,7 +272,7 @@ async function putData(url, data) {
             if (response.status === 401) {
                 console.error('❌ No autorizado. Redirigiendo a login...');
                 sessionStorage.clear();
-                window.location.href = '/login.html';
+               
                 return null;
             }
 
@@ -331,7 +311,7 @@ async function deleteData(url) {
             if (response.status === 401) {
                 console.error('❌ No autorizado. Redirigiendo a login...');
                 sessionStorage.clear();
-                window.location.href = '/login.html';
+               
                 return null;
             }
 
@@ -352,8 +332,6 @@ async function deleteData(url) {
     }
 }
 
-// ========== FUNCIONES AUXILIARES DE SESIÓN ==========
-
 function getCurrentUser() {
     try {
         const userStr = sessionStorage.getItem('user');
@@ -368,7 +346,6 @@ function isAuthenticated() {
     return sessionStorage.getItem('isAuthenticated') === 'true';
 }
 
-// ========== FUNCIÓN LEGACY (mantener compatibilidad) ==========
 function createTimeEntryJson(codigoEmpleado, fecha, proyecto, tarea, horas, status, observaciones) {
     return {
         employeeId: codigoEmpleado,

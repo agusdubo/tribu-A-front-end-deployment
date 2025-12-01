@@ -25,18 +25,13 @@ const HourEntry = () => {
 
     const days = useMemo(() => ['mon', 'tue', 'wed', 'thu', 'fri'], []);
 
-    // ✅ SIEMPRE LA SEMANA ACTUAL - NO PUEDE CAMBIAR
     const currentWeek = dateUtils.getCurrentWeekString();
     const [weekValue, setWeekValue] = useState(currentWeek);
 
-    // ✅ VALIDAR SI LA SEMANA ESTÁ CERRADA
     const isWeekClosed = (weekString) => {
         return weekString !== currentWeek;
     };
 
-    // ========================================
-    // VALIDACIÓN INICIAL
-    // ========================================
     useEffect(() => {
         if (!resourceId || !projectId) {
             alert('Faltan datos necesarios. Redirigiendo a selección de proyectos.');
@@ -59,7 +54,6 @@ const HourEntry = () => {
 
                 setTasks(loadedTasks);
 
-                // Inicializar estructura de datos de horas
                 const initialHours = {};
                 loadedTasks.forEach(task => {
                     initialHours[task.id] = { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0 };
@@ -78,9 +72,6 @@ const HourEntry = () => {
         loadTasks();
     }, [projectId, resourceId, navigate]);
 
-    // ========================================
-    // MANEJAR CAMBIO DE HORAS
-    // ========================================
     const handleHourInput = (taskId, day, value) => {
         let hours = parseFloat(value) || 0;
         hours = Math.max(0, Math.min(24, hours));
@@ -91,9 +82,6 @@ const HourEntry = () => {
         }));
     };
 
-    // ========================================
-    // CALCULAR TOTALES
-    // ========================================
     const totals = useMemo(() => {
         let grandTotal = 0;
         let dayTotals = { mon: 0, tue: 0, wed: 0, thu: 0, fri: 0 };
@@ -113,9 +101,6 @@ const HourEntry = () => {
         return { dayTotals, grandTotal, taskTotals };
     }, [hoursData, tasks, days]);
 
-    // ========================================
-    // RESETEAR TABLA
-    // ========================================
     const resetTable = () => {
         const initialHours = {};
         tasks.forEach(task => {
@@ -125,9 +110,6 @@ const HourEntry = () => {
         setSavedEntryIds([]);
     };
 
-    // ========================================
-    // 💾 GUARDAR HORAS (Estado: DRAFT)
-    // ========================================
     const saveHours = async () => {
         if (isWeekClosed(weekValue)) {
             alert('⛔ No puedes guardar horas en semanas cerradas. Solo se permite la semana actual.');
@@ -179,8 +161,6 @@ const HourEntry = () => {
             }
 
             setSavedEntryIds(newEntryIds);
-
-            // ✅ LIMPIAR LA TABLA DESPUÉS DE GUARDAR EXITOSAMENTE
             resetTable();
 
             alert(`✅ Se guardaron ${entriesToSave.length} registros como BORRADOR!\n\n📝 Ahora puedes enviarlos a aprobación usando el botón "Enviar a Supervisor".`);
@@ -193,9 +173,6 @@ const HourEntry = () => {
         }
     };
 
-    // ========================================
-    // 📤 ENVIAR A SUPERVISOR (Estado: DRAFT → SUBMITTED)
-    // ========================================
     const submitToSupervisor = async () => {
         if (savedEntryIds.length === 0) {
             alert('⚠️ Primero debes guardar las horas antes de enviarlas a aprobación');
@@ -232,9 +209,6 @@ const HourEntry = () => {
         }
     };
 
-    // ========================================
-    // RENDER: LOADING
-    // ========================================
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
@@ -254,9 +228,6 @@ const HourEntry = () => {
         );
     }
 
-    // ========================================
-    // RENDER: PRINCIPAL
-    // ========================================
     return (
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
             <Header

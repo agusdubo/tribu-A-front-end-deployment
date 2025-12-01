@@ -15,11 +15,9 @@ const ReportesPage = () => {
     const cargarDatos = async (anio) => {
         setLoading(true);
         try {
-            // Llamada al endpoint que usa la Calculadora
             const dataReporte = await ApiService.obtenerReporteMensual(anio);
             
             const proyectosProcesados = dataReporte.map(item => {
-                // Convertimos la lista de objetos a un array simple de 12 posiciones
                 const arrayCostosMensuales = item.costoMes.map(cm => cm.costo);
 
                 return {

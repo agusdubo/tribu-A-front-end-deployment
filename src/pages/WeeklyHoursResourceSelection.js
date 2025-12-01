@@ -5,7 +5,6 @@ import Header from '../components/Header';
 import LoadingState from '../components/LoadingState';
 import APIClient from '../services/APIClient';
 
-// ✅ ID del rol de Manager (Horacio)
 const ROL_ID_MANAGER = "6e6ecd47-fa18-490e-b25a-c9101a398b6d";
 
 const WeeklyHoursResourceSelection = () => {
@@ -20,8 +19,6 @@ const WeeklyHoursResourceSelection = () => {
             setError(null);
             try {
                 const data = await APIClient.getAllResources();
-
-                // ✅ FILTRAR: Excluir empleados con rol de MANAGER
                 const filteredResources = data.filter(resource =>
                     resource.rolId !== ROL_ID_MANAGER
                 );

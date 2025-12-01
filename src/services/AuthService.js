@@ -25,9 +25,7 @@ const AuthService = {
 
     logout() {
         sessionStorage.clear();
-        window.location.href = '/';
     }
 };
 
-// ✅ EXPORTACIÓN PARA REACT
 export default AuthService;

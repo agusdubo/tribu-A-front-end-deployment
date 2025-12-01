@@ -16,11 +16,10 @@ const MyHours = () => {
     const [selectedIds, setSelectedIds] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // ✅ FUNCIÓN PARA OBTENER FECHAS DE LA SEMANA ACTUAL
     const getCurrentWeekDates = () => {
         const now = new Date();
-        const dayOfWeek = now.getDay(); // 0 = Domingo, 1 = Lunes, ...
-        const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Ajustar al lunes
+        const dayOfWeek = now.getDay();
+        const diff = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
 
         const monday = new Date(now);
         monday.setDate(now.getDate() + diff);
@@ -33,9 +32,6 @@ const MyHours = () => {
         return { monday, sunday };
     };
 
-    // ========================================
-    // CARGAR HORAS DEL EMPLEADO (SOLO SEMANA ACTUAL)
-    // ========================================
     useEffect(() => {
         if (!employeeId) {
             navigate('/');
@@ -50,17 +46,14 @@ const MyHours = () => {
         try {
             console.log('📋 Cargando mis horas de la semana actual...');
 
-            // ✅ OBTENER FECHAS DE LA SEMANA ACTUAL
             const { monday, sunday } = getCurrentWeekDates();
             const startDate = monday.toISOString().split('T')[0];
             const endDate = sunday.toISOString().split('T')[0];
 
             console.log('📅 Filtrando por semana actual:', { startDate, endDate });
 
-            // ✅ LLAMAR A LA API CON FILTRO DE FECHAS
             const data = await APIClient.getTimeEntries(employeeId, startDate, endDate);
 
-            // Ordenar por fecha descendente
             const sorted = data.sort((a, b) =>
                 new Date(b.workDate) - new Date(a.workDate)
             );
@@ -68,7 +61,6 @@ const MyHours = () => {
             setEntries(sorted);
             console.log('✅ Horas cargadas (solo semana actual):', sorted.length);
 
-            // 🔍 DEBUG: Ver qué datos vienen del backend
             if (sorted.length > 0) {
                 console.log('🔍 Primera entrada:', sorted[0]);
                 console.log('🔍 Campos disponibles:', Object.keys(sorted[0]));
@@ -83,9 +75,6 @@ const MyHours = () => {
         }
     };
 
-    // ========================================
-    // SELECCIÓN DE ENTRADAS
-    // ========================================
     const toggleSelection = (id) => {
         setSelectedIds(prev =>
             prev.includes(id)
@@ -101,9 +90,6 @@ const MyHours = () => {
         setSelectedIds(draftIds);
     };
 
-    // ========================================
-    // ENVIAR A SUPERVISOR
-    // ========================================
     const handleSubmit = async () => {
         if (selectedIds.length === 0) {
             alert('⚠️ Selecciona al menos una entrada para enviar');
@@ -124,7 +110,6 @@ const MyHours = () => {
 
             alert(`✅ Se enviaron ${selectedIds.length} entrada(s) para aprobación!`);
 
-            // Limpiar selección y recargar
             setSelectedIds([]);
             await loadMyHours();
 
@@ -136,9 +121,6 @@ const MyHours = () => {
         }
     };
 
-    // ========================================
-    // ELIMINAR ENTRADA
-    // ========================================
     const handleDelete = async (id) => {
         if (!window.confirm('¿Eliminar esta entrada?')) return;
 
@@ -151,9 +133,6 @@ const MyHours = () => {
         }
     };
 
-    // ========================================
-    // HELPERS
-    // ========================================
     const getStatusInfo = (status) => {
         const statuses = {
             'DRAFT': { text: 'Borrador', color: 'bg-gray-100 text-gray-800', icon: Clock },
@@ -180,7 +159,6 @@ const MyHours = () => {
         });
     };
 
-    // ✅ HELPERS PARA MOSTRAR NOMBRES
     const getProjectDisplay = (entry) => {
         if (entry.projectName) {
             return entry.projectName;
@@ -198,18 +176,13 @@ const MyHours = () => {
         return 'Sin tarea';
     };
 
-    // Agrupar por estado
     const draftEntries = entries.filter(e => e.status === 'DRAFT');
     const submittedEntries = entries.filter(e => e.status === 'SUBMITTED');
     const approvedEntries = entries.filter(e => e.status === 'APPROVED');
     const rejectedEntries = entries.filter(e => e.status === 'REJECTED');
 
-    // ✅ OBTENER FECHAS PARA MOSTRAR EN EL HEADER
     const { monday, sunday } = getCurrentWeekDates();
 
-    // ========================================
-    // RENDER: LOADING
-    // ========================================
     if (loading) {
         return (
             <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
@@ -224,9 +197,6 @@ const MyHours = () => {
         );
     }
 
-    // ========================================
-    // RENDER: PRINCIPAL
-    // ========================================
     return (
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
             <Header
@@ -410,9 +380,6 @@ const MyHours = () => {
     );
 };
 
-// ========================================
-// COMPONENTE STATCARD
-// ========================================
 const StatCard = ({ label, count, color }) => {
     const colors = {
         gray: 'bg-gray-100 text-gray-800 border-gray-300',

@@ -62,7 +62,6 @@ const ApproveHours = () => {
                 alert('❌ Horas rechazadas y empleado notificado.');
             }
 
-            // ✅ Recargar la lista después de la acción
             loadApprovals();
 
         } catch (err) {
@@ -71,28 +70,22 @@ const ApproveHours = () => {
         }
     };
 
-    // ✅ Renderizar tabla detallada de horas (ahora con datos reales)
-    // ✅ REEMPLAZAR LA FUNCIÓN renderDetailedHours EN ApproveHours.js
-
     const renderDetailedHours = (entry) => {
         const daysOfWeek = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE'];
 
-        // ✅ CALCULAR EL ÍNDICE CORRECTO DEL DÍA
         const workDate = new Date(entry.workDate + 'T00:00:00');
-        const dayOfWeek = workDate.getDay(); // 0=Domingo, 1=Lunes, ..., 5=Viernes, 6=Sábado
+        const dayOfWeek = workDate.getDay();
 
-        // Convertir a índice de array (0=Lunes, 1=Martes, ..., 4=Viernes)
         let dayIndex;
-        if (dayOfWeek === 0) { // Domingo
-            dayIndex = -1; // No debería pasar, pero por las dudas
-        } else if (dayOfWeek === 6) { // Sábado
-            dayIndex = -1; // No debería pasar
+        if (dayOfWeek === 0) {
+            dayIndex = -1;
+        } else if (dayOfWeek === 6) {
+            dayIndex = -1;
         } else {
-            dayIndex = dayOfWeek - 1; // 1(Lun)→0, 2(Mar)→1, 3(Mié)→2, 4(Jue)→3, 5(Vie)→4
+            dayIndex = dayOfWeek - 1;
         }
 
-        // ✅ CREAR ARRAY DE HORAS CON EL VALOR EN EL DÍA CORRECTO
-        const hoursArray = [0, 0, 0, 0, 0]; // Inicializar todo en 0
+        const hoursArray = [0, 0, 0, 0, 0];
         if (dayIndex >= 0 && dayIndex < 5) {
             hoursArray[dayIndex] = entry.totalHours || (entry.workedMinutes / 60);
         }
@@ -101,7 +94,7 @@ const ApproveHours = () => {
             {
                 project: entry.projectName || entry.projectId,
                 task: entry.taskName || entry.taskId || 'Sin tarea',
-                hours: hoursArray // ✅ Ahora con el día correcto
+                hours: hoursArray
             }
         ];
 

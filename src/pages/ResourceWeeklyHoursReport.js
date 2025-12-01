@@ -50,11 +50,10 @@ const ResourceWeeklyHoursReport = () => {
         }
     };
 
-    // Generar reporte al cargar el componente con fechas por defecto
     useEffect(() => {
         if (employeeId) generarReporte();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [employeeId]); // Se ejecuta solo al montar o si cambia el ID
+
+    }, [employeeId]);
 
     if (!employeeId) return <p className="text-red-500 p-4">Error: No se especificó un empleado.</p>;
 
@@ -163,5 +162,4 @@ const ResourceWeeklyHoursReport = () => {
     );
 };
 
-// Al final del archivo
 export default ResourceWeeklyHoursReport;
