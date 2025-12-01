@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tribu-A-frontend-2025-2C/static/css/main.bf55de28.css",
+    "main.js": "/tribu-A-frontend-2025-2C/static/js/main.5165affa.js",
+    "index.html": "/tribu-A-frontend-2025-2C/index.html",
+    "main.bf55de28.css.map": "/tribu-A-frontend-2025-2C/static/css/main.bf55de28.css.map",
+    "main.5165affa.js.map": "/tribu-A-frontend-2025-2C/static/js/main.5165affa.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bf55de28.css",
+    "static/js/main.5165affa.js"
+  ]
+}
